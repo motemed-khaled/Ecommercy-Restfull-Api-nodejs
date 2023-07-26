@@ -10,6 +10,7 @@ dotenv.config();
 import { ApiError } from "./utils//api_errors.js";
 import { dbConnection } from "./config/database.js";
 import { globalError } from "./middleware/error_middleware.js";
+import { webhookCheckOut } from "./controllers/orderController.js";
 // routes
 import { mountRoutes } from "./routes/mountRoutes.js";
 
@@ -25,6 +26,8 @@ app.options("*", cors());
 
 // compress all response
 app.use(compression());
+
+app.post("/webhook-checkout" , express.raw({type: 'application/json'}) , webhookCheckOut)
 
 // middleware
 if (process.env.NODE_ENV ==="development") {
