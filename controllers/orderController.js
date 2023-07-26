@@ -4,6 +4,7 @@ import Stripe from "stripe";
 
 import { cartModel } from "../models/cart-model.js";
 import { orderModel } from "../models/order-model.js";
+import { userModel } from "../models/userModel.js";
 import { productModel } from "../models/product_model.js";
 import { ApiError } from './../utils/api_errors.js';
 import { getAll , getOne } from "./handlersFactory.js";
@@ -143,8 +144,39 @@ export const checkOutSession = asyncHandler(async (req, res, next) => {
     res.status(200).json({ status: "success", session });
 });
 
+const createOnlineOrder = async(session) => {
+    const cartId = session.client_reference_id;
+    const shippingAddress = session.metadata;
+    const orderPrice = session.amount_total / 100;
+
+    const cart = await cartModel.findById(cartId);
+    const user = await userModel.findOne({ email: session.customer_email });
+
+    const order = await orderModel.create({
+        user: user._id,
+        cartItems: cart.cartItems,
+        shippingAddress: shippingAddress,
+        totalOrderPrice: orderPrice,
+        isPaid: true,
+        paidAt: Date.now(),
+        paymentMethodType:"card"
+    });
+
+    if (order) {
+        
+        const bulkOptions = cart.cartItems.map(item => ({
+            updateOne: {
+                filter: { _id: item.product },
+                update: { $inc: { quantity: -item.quantity, sold: +item.quantity } }
+            },
+        }));
+        await productModel.bulkWrite(bulkOptions, {});
+
+        await cartModel.findByIdAndDelete(cartId);
+    }
+}
+
 export const webhookCheckOut = asyncHandler(async (req, res) => {
-    console.log("hererreeree")
     const stripe = new Stripe(process.env.SECRET_KEY_STRIPE);
     const sig = req.headers['stripe-signature'];
 
@@ -157,6 +189,7 @@ export const webhookCheckOut = asyncHandler(async (req, res) => {
     }
     
     if (event.type === "checkout.session.completed") {
-        console.log("create order here......")
+        createOnlineOrder(event.data.object);
     }
+    res.status(200).json({ recieved: true });
 });
