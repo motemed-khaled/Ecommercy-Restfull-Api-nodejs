@@ -144,6 +144,7 @@ export const checkOutSession = asyncHandler(async (req, res, next) => {
 });
 
 export const webhookCheckOut = asyncHandler(async (req, res) => {
+    console.log("hererreeree")
     const stripe = new Stripe(process.env.SECRET_KEY_STRIPE);
     const sig = req.headers['stripe-signature'];
 
