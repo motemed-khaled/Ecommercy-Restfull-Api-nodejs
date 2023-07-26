@@ -27,7 +27,7 @@ app.options("*", cors());
 // compress all response
 app.use(compression());
 
-app.post("/webhook-checkout" , express.raw({type: 'application/json'}) , webhookCheckOut)
+app.post("/webhook-checkout" , exppress.raw({type: 'application/json'}) , webhookCheckOut)
 
 // middleware
 if (process.env.NODE_ENV ==="development") {
