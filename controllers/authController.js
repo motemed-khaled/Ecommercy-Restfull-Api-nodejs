@@ -5,6 +5,7 @@ import bcryptjs from "bcryptjs";
 import { ApiError } from './../utils/api_errors.js';
 import { generateToken } from "../utils/generateToken.js";
 import { userModel } from "../models//userModel.js";
+import { sanitizeUserSignUp , sanitizeUserLogin } from "../utils/sanitizeData.js";
 
 
 
@@ -19,7 +20,7 @@ export const sginUp = asyncHandler(async (req, res) => {
 
     const token = generateToken(user._id)
 
-    res.status(201).json({ data: user, token: token });
+    res.status(201).json({ data: sanitizeUserSignUp(user), token: token });
 
 });
 
@@ -32,7 +33,7 @@ export const login = asyncHandler(async (req, res, next) => {
 
     const token = generateToken(user._id);
 
-    res.status(200).json({ data: user, token: token });
+    res.status(200).json({ data: sanitizeUserLogin(user), token: token });
 });
 
 export const auth = asyncHandler(async (req, res, next) => {
