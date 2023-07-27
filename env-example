@@ -3,7 +3,7 @@ NODE_ENV = development
 BASE_URL=http://localhost:5000
 
 # database
-DB_URI =mongodb+srv://MotemedKhaled:i3OpzrcaWVp0RqYy@cluster0.qmboplf.mongodb.net/E-Commerce-db?retryWrites=true&w=majority
+DB_URI =
 
 # jwt config
 
@@ -19,5 +19,5 @@ EMAIL_PASS=
 
 # stripe setting 
 
-SECRET_KEY_STRIPE=sk_test_51NXbCfGjOt1yazxyb8yZ7jENqILrimLkFedzRR5VqeuJfipQevhEBLGPfaa1Py7FDFlB2WusIC5IhCgH3Ljgs4XV00gv7lAmnC
-WEBHOOK_STRIPE_SECRET=whsec_pYQ3HbnL8bSo8zkUCC7JsCfvGK6BHvav
+SECRET_KEY_STRIPE=
+WEBHOOK_STRIPE_SECRET=
