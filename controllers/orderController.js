@@ -122,7 +122,7 @@ export const checkOutSession = asyncHandler(async (req, res, next) => {
 
     const totalOrderPrice = cartPrice + shippingPrice + shippingTax;
 
-    const stripe = new Stripe(process.env.SECRET_KEY_STRIPE);
+    const stripe =  new Stripe(process.env.SECRET_KEY_STRIPE);
     const session = await stripe.checkout.sessions.create({
         line_items: [{
             price_data: {

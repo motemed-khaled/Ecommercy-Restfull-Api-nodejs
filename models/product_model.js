@@ -74,6 +74,8 @@ productSchema.virtual("reviews", {
     localField: "_id"
 });
 
+
+
 productSchema.pre(/^find/, function (next) {
     this.populate({
         path: "catogry",
